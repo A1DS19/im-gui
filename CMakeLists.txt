@@ -1,40 +1,43 @@
 cmake_minimum_required(VERSION 3.14)
+project(${PROJECT_NAME} LANGUAGES CXX)
 
-# Dynamically name the project after the folder
-get_filename_component(PROJECT_NAME \${CMAKE_SOURCE_DIR} NAME)
-project(\${PROJECT_NAME} LANGUAGES CXX)
-
-# Enable compile_commands.json
+# Keep compile_commands.json around
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# Use modern C++ standard
+# Use C++20
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Enable verbose makefile
+# More verbose output during build
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# Include local headers
-include_directories(\${CMAKE_SOURCE_DIR}/include)
+# Grab all .cpp files under src/ (re-runs if you add new files)
+file(GLOB
+  SOURCES
+  CONFIGURE_DEPENDS
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+)
 
-# Gather all source files
-file(GLOB SOURCES CONFIGURE_DEPENDS \${CMAKE_SOURCE_DIR}/src/*.cpp)
+if (NOT SOURCES)
+  message(FATAL_ERROR "No .cpp files found in ${CMAKE_CURRENT_SOURCE_DIR}/src!")
+endif()
 
-# Define the executable
-add_executable(main \${SOURCES})
+# Create the executable, expanding the list into multiple args
+add_executable(main ${SOURCES})
 
-# Set output directory
+# Include our headers
+target_include_directories(main PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+# Put the binary into bin/
 set_target_properties(main PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY \${CMAKE_SOURCE_DIR}/bin
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
 )
 
-# Optional: link libraries from lib/
-# link_directories(\${CMAKE_SOURCE_DIR}/lib)
-# target_link_libraries(main PRIVATE pdcurses)
-
-# Optional: custom target to generate .clang_complete
-add_custom_target(
-  generate_clang_complete
-  COMMAND python \${CMAKE_SOURCE_DIR}/scripts/cc_args.py \${CMAKE_BINARY_DIR}/compile_commands.json > \${CMAKE_SOURCE_DIR}/.clang_complete
-  DEPENDS \${CMAKE_BINARY_DIR}/compile_commands.json
+# Optional: generate .clang_complete
+add_custom_target(generate_clang_complete
+  COMMAND python "${CMAKE_SOURCE_DIR}/scripts/cc_args.py"
+          "${CMAKE_BINARY_DIR}/compile_commands.json"
+          > "${CMAKE_SOURCE_DIR}/.clang_complete"
+  DEPENDS "${CMAKE_BINARY_DIR}/compile_commands.json"
 )
+
