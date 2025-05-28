@@ -43,6 +43,9 @@ int main() {
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 330");
 
+  constexpr int widget_flags =
+      ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+
   // 6) Main loop
   while (!glfwWindowShouldClose(window)) {
     // Poll events
@@ -54,7 +57,14 @@ int main() {
     ImGui::NewFrame();
 
     // 7) Your ImGui widgets here
-    ImGui::Begin("Hello, world!");
+    ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+    ImGui::SetNextWindowSize(ImVec2(350.0f, 350.0f));
+    ImGui::Begin("Hello, world!", nullptr, widget_flags);
+    ImGui::Text("This is some useful text.");
+    ImGui::Button("Click me");
+    ImGui::End();
+
+    ImGui::Begin("Hello, dsdsd!");
     ImGui::Text("This is some useful text.");
     ImGui::Button("Click me");
     ImGui::End();
