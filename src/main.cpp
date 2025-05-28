@@ -44,7 +44,8 @@ int main() {
   ImGui_ImplOpenGL3_Init("#version 330");
 
   constexpr int widget_flags =
-      ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+      ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+      ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
   // 6) Main loop
   while (!glfwWindowShouldClose(window)) {
