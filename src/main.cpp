@@ -45,7 +45,8 @@ int main() {
 
   constexpr int widget_flags =
       ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
-      ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+      ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse |
+      ImGuiWindowFlags_NoResize;
 
   // 6) Main loop
   while (!glfwWindowShouldClose(window)) {
