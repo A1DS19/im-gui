@@ -34,6 +34,7 @@ void Renderer::DrawContent() noexcept {
 }
 
 void Renderer::DrawMenu() noexcept {
+  // 13:57
   for (const auto &entry : fs::directory_iterator(m_current_path)) {
     std::cout << entry << std::endl;
   }
