@@ -1,10 +1,12 @@
 #include <glad/glad.h>
+
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "render.hpp"
 
 int main() {
   // 1) Initialize GLFW
@@ -17,7 +19,8 @@ int main() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   // 2) Create window
-  GLFWwindow *window = glfwCreateWindow(1280, 720, "im-gui", nullptr, nullptr);
+  GLFWwindow *window = glfwCreateWindow(Renderer::SCREEN_W, Renderer::SCREEN_H,
+                                        "file-explorer", nullptr, nullptr);
   if (window == nullptr) {
     glfwTerminate();
     return -1;
@@ -48,6 +51,8 @@ int main() {
       ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse |
       ImGuiWindowFlags_NoResize;
 
+  auto render = Renderer();
+
   // 6) Main loop
   while (!glfwWindowShouldClose(window)) {
     // Poll events
@@ -59,17 +64,7 @@ int main() {
     ImGui::NewFrame();
 
     // 7) Your ImGui widgets here
-    ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
-    ImGui::SetNextWindowSize(ImVec2(350.0f, 350.0f));
-    ImGui::Begin("Hello, world!", nullptr, widget_flags);
-    ImGui::Text("This is some useful text.");
-    ImGui::Button("Click me");
-    ImGui::End();
-
-    ImGui::Begin("Hello, dsdsd!");
-    ImGui::Text("This is some useful text.");
-    ImGui::Button("Click me");
-    ImGui::End();
+    render.Draw("File Explorer", widget_flags);
 
     // 8) Rendering
     ImGui::Render();
